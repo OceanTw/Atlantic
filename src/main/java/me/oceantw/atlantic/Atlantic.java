@@ -1,7 +1,18 @@
 package me.oceantw.atlantic;
 
-public class Atlantic {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Atlantic extends JavaPlugin {
+
+
+    @Override
+    public void onEnable() {
+        getLogger().info("Atlantic enabled!");
+
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("Atlantic disabled!");
     }
 }
