@@ -1,7 +1,7 @@
 
 # ⚔️ AtlanticUHC
 
-A UHC Plugin made specific for modern versions of Minecraft
+A UHC Plugin made specificly for modern versions of Minecraft
 
 ## Information
 The plugin is not done yet, if you want to join the development, DM "oceaning" on Discord
