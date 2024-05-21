@@ -11,7 +11,7 @@ public class Atlantic extends JavaPlugin {
     private static Atlantic instance;
 
     @Getter
-    Config MainConfig, messagesConfig, kitsConfig, scoreboardsConfig;
+    Config MainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
 
     @Override
     public void onEnable() {

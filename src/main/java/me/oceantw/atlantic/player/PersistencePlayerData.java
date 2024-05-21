@@ -13,8 +13,8 @@ public class PersistencePlayerData {
         return new PersistencePlayerData(0, 0, 0, 0);
     }
 
-    public static PersistencePlayerData create(int kills, int deaths, int wins, int games) {
-        return new PersistencePlayerData(kills, deaths, wins, games);
-    }
+//    public static PersistencePlayerData create(int kills, int deaths, int wins, int games) {
+//        return new PersistencePlayerData(kills, deaths, wins, games);
+//    }
 }
 
