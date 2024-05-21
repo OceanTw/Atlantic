@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BuildJar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BuildJar</output-path>
+    <root id="archive" name="Atlantic.jar">
+      <element id="module-output" name="Atlantic" />
+    </root>
+  </artifact>
+</component>
