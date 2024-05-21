@@ -8,6 +8,7 @@ import dev.rollczi.litecommands.annotations.permission.Permission;
 import me.oceantw.atlantic.match.MatchManager;
 import me.oceantw.atlantic.match.MatchStatus;
 import me.oceantw.atlantic.player.GamePlayer;
+import me.oceantw.atlantic.player.PlayerManager;
 import org.bukkit.entity.Player;
 
 @Command(name = "matchjoin", aliases = {"j"})
@@ -20,7 +21,7 @@ public class MatchJoinCommand {
             MatchManager.getInstance().getMatches().stream()
                     .filter(match -> match.getStatus().equals(MatchStatus.WAITING))
                     .findFirst()
-                    .ifPresent(match -> match.join(GamePlayer));
+                    .ifPresent(match -> match.join(PlayerManager.getInstance().getGamePlayer(player)));
         } else {
             // Join the match with the given ID
         }
