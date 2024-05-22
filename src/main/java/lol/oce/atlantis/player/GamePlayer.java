@@ -1,8 +1,8 @@
-package me.oceantw.atlantic.player;
+package lol.oce.atlantis.player;
 
+import lol.oce.atlantis.Atlantis;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import me.oceantw.atlantic.Atlantic;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -18,12 +18,12 @@ public class GamePlayer {
         GamePlayer gamePlayer = new GamePlayer(player.getUniqueId(), player, PersistencePlayerData.createDefault());
         PlayerManager.getInstance().getPlayers().add(gamePlayer);
 
-        Atlantic.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".name", player.getName());
-        Atlantic.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".kills", 0);
-        Atlantic.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".deaths", 0);
-        Atlantic.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".wins", 0);
-        Atlantic.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".games", 0);
-        Atlantic.getInstance().saveConfig();
+        Atlantis.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".name", player.getName());
+        Atlantis.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".kills", 0);
+        Atlantis.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".deaths", 0);
+        Atlantis.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".wins", 0);
+        Atlantis.getInstance().getDataConfig().set("players." + player.getUniqueId() + ".games", 0);
+        Atlantis.getInstance().saveConfig();
         PlayerManager.getInstance().addPlayer(gamePlayer);
         return gamePlayer;
     }

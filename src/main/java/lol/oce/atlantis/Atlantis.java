@@ -1,14 +1,14 @@
-package me.oceantw.atlantic;
+package lol.oce.atlantis;
 
 import de.leonhard.storage.Config;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class Atlantic extends JavaPlugin {
+public class Atlantis extends JavaPlugin {
 
     @Getter
-    private static Atlantic instance;
+    private static Atlantis instance;
 
     @Getter
     Config MainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;

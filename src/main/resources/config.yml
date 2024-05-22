@@ -2,3 +2,4 @@ match:
   min-players-to-start: 40
   max-players: 100
   countdown: 300 # Time until game start in seconds (Starts when the game has at least the minimum players"
+  duration: 1800 # Time until game deathmatch in seconds

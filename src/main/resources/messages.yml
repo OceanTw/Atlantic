@@ -1,0 +1,21 @@
+messages:
+  match:
+    start: "&a&lMATCH STARTED!"
+    end:
+      - "&c&lMATCH ENDED!"
+      - "&a&WINNER: &6&l{0}"
+      - "&eYOUR STATS:"
+      - "&7&m---------------------"
+      - "&e&lKills: &6&l{0}"
+      - "&e&lDamage Dealt: &6&l{2}"
+      - "&e&lDamage Taken: &6&l{3}"
+      - "&e&lHealing Done: &6&l{4}"
+      - "&eGolden Apples Eaten: &6&l{5}"
+      - "&eGolden Heads Eaten: &6&l{6}"
+      - "&e&lArrows Shot: &6&l{7}"
+      - "&e&lArrows Hit: &6&l{8}"
+      - "&7&m---------------------"
+    countdowns:
+      starting: "&e&lMatch starting in &6&l{0}&e&l seconds!"
+      deathmatch: "&e&lDeathmatch in &6&l{0}&e&l seconds!"
+      ending: "&e&lMatch ends in &6&l{0}&e&l seconds!"

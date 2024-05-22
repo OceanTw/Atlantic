@@ -1,8 +1,10 @@
-package me.oceantw.atlantic.player;
+package lol.oce.atlantis.player;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
+@Data
 public class PersistencePlayerData {
     private int kills;
     private int deaths;

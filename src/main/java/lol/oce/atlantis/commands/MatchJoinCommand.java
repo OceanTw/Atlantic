@@ -1,14 +1,13 @@
-package me.oceantw.atlantic.commands;
+package lol.oce.atlantis.commands;
 
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import me.oceantw.atlantic.match.MatchManager;
-import me.oceantw.atlantic.match.MatchStatus;
-import me.oceantw.atlantic.player.GamePlayer;
-import me.oceantw.atlantic.player.PlayerManager;
+import lol.oce.atlantis.match.MatchManager;
+import lol.oce.atlantis.match.MatchStatus;
+import lol.oce.atlantis.player.PlayerManager;
 import org.bukkit.entity.Player;
 
 @Command(name = "matchjoin", aliases = {"j"})

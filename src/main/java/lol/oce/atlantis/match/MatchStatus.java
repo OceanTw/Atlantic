@@ -1,4 +1,4 @@
-package me.oceantw.atlantic.match;
+package lol.oce.atlantis.match;
 
 public enum MatchStatus {
     WAITING,

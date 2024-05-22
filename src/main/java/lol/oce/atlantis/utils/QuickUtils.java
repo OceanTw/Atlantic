@@ -1,4 +1,4 @@
-package me.oceantw.atlantic.utils;
+package lol.oce.atlantis.utils;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;

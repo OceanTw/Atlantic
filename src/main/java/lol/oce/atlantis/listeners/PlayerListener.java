@@ -1,7 +1,7 @@
-package me.oceantw.atlantic.listeners;
+package lol.oce.atlantis.listeners;
 
-import me.oceantw.atlantic.player.GamePlayer;
-import me.oceantw.atlantic.player.PlayerManager;
+import lol.oce.atlantis.player.GamePlayer;
+import lol.oce.atlantis.player.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

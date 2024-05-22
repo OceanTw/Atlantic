@@ -1,8 +1,7 @@
-package me.oceantw.atlantic.player;
+package lol.oce.atlantis.player;
 
-import lombok.Data;
+import lol.oce.atlantis.Atlantis;
 import lombok.Getter;
-import me.oceantw.atlantic.Atlantic;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class PlayerManager {
     }
 
     public boolean isPlayerExists(Player player) {
-        return Atlantic.getInstance().getDataConfig().contains("players." + player.getUniqueId());
+        return Atlantis.getInstance().getDataConfig().contains("players." + player.getUniqueId());
     }
 
     public void addPlayer(GamePlayer gamePlayer) {
