@@ -22,5 +22,8 @@ public class Match {
         players.add(player);
         player.getPlayer().sendMessage(StringUtils.handleString(
                 Atlantic.getInstance().getMessagesConfig().getString("messages.match.join")));
+        if (players.size() >= Atlantic.getInstance().getMainConfig().getInt("match.min-players-to-start")) {
+            MatchManager.getInstance().countdown(this);
+        }
     }
 }
