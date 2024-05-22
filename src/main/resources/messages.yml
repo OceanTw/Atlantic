@@ -15,6 +15,7 @@ messages:
       - "&e&lArrows Shot: &6&l{7}"
       - "&e&lArrows Hit: &6&l{8}"
       - "&7&m---------------------"
+      - "&7&oSending you back to the lobby..."
     countdowns:
       starting: "&e&lMatch starting in &6&l{0}&e&l seconds!"
       deathmatch: "&e&lDeathmatch in &6&l{0}&e&l seconds!"

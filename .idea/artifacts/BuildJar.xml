@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="BuildJar">
-    <output-path>$PROJECT_DIR$/out/artifacts/BuildJar</output-path>
+    <output-path>$USER_HOME$/Documents/test server/plugins</output-path>
     <root id="archive" name="Atlantic.jar">
       <element id="module-output" name="Atlantis" />
     </root>

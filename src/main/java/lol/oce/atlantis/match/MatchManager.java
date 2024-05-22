@@ -52,7 +52,7 @@ public class MatchManager {
             @Override
             public void run() {
                 if (seconds == 0) {
-                    end(match);
+                    deathmatch(match);
                     cancel();
                     return;
                 }
@@ -63,13 +63,12 @@ public class MatchManager {
 
     public void deathmatch(Match match) {
         match.setStatus(MatchStatus.DEATHMATCH);
-
     }
 
     public void end(Match match) {
         match.setStatus(MatchStatus.ENDING);
         task = new BukkitRunnable() {
-            int seconds = Atlantis.getInstance().getMainConfig().getInt("match.end");
+            int seconds = 15;
 
             @Override
             public void run() {

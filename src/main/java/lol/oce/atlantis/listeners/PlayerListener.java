@@ -9,11 +9,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
 
+    // TODO: Finish this thing
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (PlayerManager.getInstance().getGamePlayer(player) == null) {
-            GamePlayer.createDefault(player);
-        }
+        PlayerManager.getInstance().addPlayer(GamePlayer.createDefault(player));
     }
 }
