@@ -23,7 +23,7 @@ public class QuickUtils {
         log(ChatColor.GRAY + "[DEBUG] " + message);
     }
 
-    public static void log(String message) {
+    private static void log(String message) {
         Bukkit.getLogger().info(StringUtils.handleString(message));
     }
 }

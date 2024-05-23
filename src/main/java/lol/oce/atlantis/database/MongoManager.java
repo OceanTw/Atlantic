@@ -16,20 +16,15 @@ public class MongoManager {
 
     MongoCollection<Document> collection;
     @Getter
-    private static MongoManager instance;
+    private static MongoManager instance = new MongoManager();
 
     public void load(String uri, String database) {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(uri))
                 .build();
-        try (MongoClient mongoClient = MongoClients.create(settings)) {
-            MongoDatabase db = mongoClient.getDatabase(database);
-            collection = db.getCollection(database);
-        }
-    }
-
-    public void close() {
-        collection.drop();
+        MongoClient mongoClient = MongoClients.create(settings);
+        MongoDatabase db = mongoClient.getDatabase(database);
+        collection = db.getCollection(database);
     }
 
 

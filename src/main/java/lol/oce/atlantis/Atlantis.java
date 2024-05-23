@@ -1,7 +1,9 @@
 package lol.oce.atlantis;
 
-import com.mongodb.client.MongoClient;
 import de.leonhard.storage.Config;
+import de.leonhard.storage.SimplixBuilder;
+import de.leonhard.storage.internal.settings.ConfigSettings;
+import de.leonhard.storage.internal.settings.DataType;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import lol.oce.atlantis.commands.MatchJoinCommand;
@@ -12,6 +14,8 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public class Atlantis extends JavaPlugin {
 
@@ -27,7 +31,7 @@ public class Atlantis extends JavaPlugin {
     Storage storage = Storage.FILE;
 
     @Getter
-    Config MainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
+    Config mainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
 
     private LiteCommands<CommandSender> liteCommands;
 
@@ -43,16 +47,47 @@ public class Atlantis extends JavaPlugin {
                 )
                 .build();
 
-        MainConfig = new Config("config", getDataFolder().getPath());
-        messagesConfig = new Config("messages", getDataFolder().getPath());
-        kitsConfig = new Config("kits", getDataFolder().getPath());
-        scoreboardsConfig = new Config("scoreboards", getDataFolder().getPath());
-        dataConfig = new Config("data", getDataFolder().getPath());
 
-        if (MainConfig.get("storage").toString().contains("MONGO")) {
-            MongoManager.getInstance().load(MainConfig.getString("mongodb.uri"),
-                    MainConfig.getString("mongodb.database"));
+        mainConfig = SimplixBuilder
+                .fromFile(new File(getDataFolder(), "config.yml"))
+                .setName("config")
+                .addInputStreamFromResource("config.yml")
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+        messagesConfig = SimplixBuilder
+                .fromFile(new File(getDataFolder(), "messages.yml"))
+                .setName("messages")
+                .addInputStreamFromResource("messages.yml")
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+        kitsConfig = SimplixBuilder
+                .fromFile(new File(getDataFolder(), "kits.yml"))
+                .setName("kits")
+                .addInputStreamFromResource("kits.yml")
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+        scoreboardsConfig = SimplixBuilder
+                .fromFile(new File(getDataFolder(), "scoreboards.yml"))
+                .setName("scoreboards")
+                .addInputStreamFromResource("scoreboards.yml")
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+        dataConfig = SimplixBuilder
+                .fromFile(new File(getDataFolder(), "data.yml"))
+                .setName("data")
+                .addInputStreamFromResource("data.yml")
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+
+
+
+        if (mainConfig.getString("storage").contains("MONGO")) {
+            MongoManager.getInstance().load(mainConfig.getString("mongodb.uri"),
+                    mainConfig.getString("mongodb.database"));
             storage = Storage.MONGO;
+        } else {
+            storage = Storage.FILE;
+
         }
 
 
@@ -64,7 +99,6 @@ public class Atlantis extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Atlantic disabled!");
         liteCommands.unregister();
-        MongoManager.getInstance().close();
     }
 
 }

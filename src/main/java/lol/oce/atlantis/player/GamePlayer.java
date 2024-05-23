@@ -2,6 +2,7 @@ package lol.oce.atlantis.player;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.database.MongoManager;
+import lol.oce.atlantis.utils.QuickUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bson.Document;
@@ -30,7 +31,7 @@ public class GamePlayer {
 
         if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
             Document document = new Document();
-            document.append("uuid", player.getUniqueId());
+            document.append("uuid", player.getUniqueId().toString());
             document.append("name", player.getName());
             document.append("kills", 0);
             document.append("deaths", 0);
@@ -62,8 +63,11 @@ public class GamePlayer {
             document.append("wins", wins);
             document.append("games", games);
             persistencePlayerData = new PersistencePlayerData(kills, deaths, wins, games);
+            QuickUtils.info("Player data loaded from MongoDB");
+            QuickUtils.info("Kills: " + kills + " Deaths: " + deaths + " Wins: " + wins + " Games: " + games);
         } else {
             persistencePlayerData = PersistencePlayerData.createDefault();
+            QuickUtils.info("New player detected, creating default data");
         }
 
         PlayerManager.getInstance().addPlayer(new GamePlayer(uuid, player, persistencePlayerData));

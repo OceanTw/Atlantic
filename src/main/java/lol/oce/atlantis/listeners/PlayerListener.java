@@ -16,7 +16,11 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
-
+            if (!PlayerManager.getInstance().isPlayerExists(player)) {
+                GamePlayer.createDefault(player);
+            } else {
+                GamePlayer.create(player.getUniqueId(), player);
+            }
         }
     }
 

@@ -6,15 +6,16 @@ import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerManager {
 
     @Getter
-    List<GamePlayer> players;
+    List<GamePlayer> players = new ArrayList<>();
 
     @Getter
-    private static PlayerManager instance;
+    private static PlayerManager instance = new PlayerManager();
 
     public GamePlayer getGamePlayer(Player player) {
         return players.stream()
@@ -25,9 +26,8 @@ public class PlayerManager {
 
     public boolean isPlayerExists(Player player) {
         if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
-            Document document = new Document();
-            document = new Document("uuid", player.getUniqueId().toString());
-            return MongoManager.getInstance().getCollection().find(document).first().isEmpty();
+            Document document = new Document("uuid", player.getUniqueId().toString());
+            return !(MongoManager.getInstance().getCollection().find(document).first() == null);
         } else {
             return false;
         }
