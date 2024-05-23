@@ -6,4 +6,6 @@ match:
   min-players-to-start: 40
   max-players: 100
   countdown: 300 # Time until game start in seconds (Starts when the game has at least the minimum players"
+  peace-duration: 600 # Time until pvp is enabled in seconds
   duration: 1800 # Time until game deathmatch in seconds
+  deathmatch-duration: 1800 # Time until game ends in seconds

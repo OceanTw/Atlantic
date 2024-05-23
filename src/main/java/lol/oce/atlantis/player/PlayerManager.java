@@ -2,17 +2,20 @@ package lol.oce.atlantis.player;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.database.MongoManager;
+import lol.oce.atlantis.types.PlayerStatus;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlayerManager {
 
     @Getter
     List<GamePlayer> players = new ArrayList<>();
+    HashMap<GamePlayer, PlayerStatus> playerStatus = new HashMap<>();
 
     @Getter
     private static PlayerManager instance = new PlayerManager();
@@ -35,5 +38,17 @@ public class PlayerManager {
 
     public void addPlayer(GamePlayer gamePlayer) {
         players.add(gamePlayer);
+    }
+
+    public void removePlayer(GamePlayer gamePlayer) {
+        players.remove(gamePlayer);
+    }
+
+    public void setPlayerStatus(GamePlayer gamePlayer, PlayerStatus status) {
+        if (playerStatus.containsKey(gamePlayer)) {
+            playerStatus.replace(gamePlayer, status);
+        } else {
+            playerStatus.put(gamePlayer, status);
+        }
     }
 }

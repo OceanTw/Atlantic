@@ -46,6 +46,7 @@ public class MatchManager {
 
     public void start(Match match) {
         match.setStatus(MatchStatus.INGAME);
+
         task = new BukkitRunnable() {
             int seconds = Atlantis.getInstance().getMainConfig().getInt("match.duration");
 
@@ -63,6 +64,19 @@ public class MatchManager {
 
     public void deathmatch(Match match) {
         match.setStatus(MatchStatus.DEATHMATCH);
+        task = new BukkitRunnable() {
+            int seconds = Atlantis.getInstance().getMainConfig().getInt("match.deathmatch-duration");
+
+            @Override
+            public void run() {
+                if (seconds == 0) {
+                    end(match);
+                    cancel();
+                    return;
+                }
+                seconds--;
+            }
+        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20L);
     }
 
     public void end(Match match) {

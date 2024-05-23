@@ -8,6 +8,7 @@ import dev.rollczi.litecommands.annotations.permission.Permission;
 import lol.oce.atlantis.match.MatchManager;
 import lol.oce.atlantis.match.MatchStatus;
 import lol.oce.atlantis.player.PlayerManager;
+import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Player;
 
 @Command(name = "matchjoin", aliases = {"j"})
@@ -21,6 +22,8 @@ public class MatchJoinCommand {
                     .filter(match -> match.getStatus().equals(MatchStatus.WAITING))
                     .findFirst()
                     .ifPresent(match -> match.join(PlayerManager.getInstance().getGamePlayer(player)));
+            PlayerManager.getInstance().setPlayerStatus(PlayerManager.getInstance().getGamePlayer(player),
+                    PlayerStatus.WAITING);
         } else {
             // Join the match with the given ID
         }

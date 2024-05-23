@@ -46,13 +46,13 @@ public class GamePlayer {
         PersistencePlayerData persistencePlayerData;
         if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
             int kills, deaths, wins, games;
-            kills = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid)).first()
+            kills = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid.toString())).first()
                     .getInteger("kills");
-            deaths = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid)).first()
+            deaths = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid.toString())).first()
                     .getInteger("deaths");
-            wins = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid)).first()
+            wins = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid.toString())).first()
                     .getInteger("wins");
-            games = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid)).first()
+            games = MongoManager.getInstance().getCollection().find(new Document("uuid", uuid.toString())).first()
                     .getInteger("games");
 
             Document document = new Document();

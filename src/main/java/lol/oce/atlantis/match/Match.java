@@ -2,10 +2,12 @@ package lol.oce.atlantis.match;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.player.GamePlayer;
+import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,18 +23,25 @@ public class Match {
 
     public void join(GamePlayer player) {
         // Join the match
+        players = players == null ? new ArrayList<>() : players;
         players.add(player);
         player.getPlayer().sendMessage(StringUtils.handleString(
-                Atlantis.getInstance().getMessagesConfig().getString("messages.match.join")));
+                Atlantis.getInstance().getMessagesConfig().getString("messages.match.join"),
+                "{0}", player.getPlayer().getName(),
+                "{1}", Integer.toString(players.size()),
+                "{2}", Integer.toString(Atlantis.getInstance().getMainConfig().getInt(
+                        "match.min-players-to-start"))));
         if (players.size() >= Atlantis.getInstance().getMainConfig().getInt("match.min-players-to-start")) {
             MatchManager.getInstance().countdown(this);
         }
+        QuickUtils.debug("Player " + player.getPlayer().getName() + " joined the match");
     }
 
     public void end() {
         // End the match
         players.forEach(player -> player.getPlayer().sendMessage(StringUtils.handleString(
-                Atlantis.getInstance().getMessagesConfig().getString("messages.match.end"))));
+                Atlantis.getInstance().getMessagesConfig().getString("messages.match.end"),
+                "{0}", winner == null ? "DRAW" : winner.getPlayer().getName())));
     }
 
 }
