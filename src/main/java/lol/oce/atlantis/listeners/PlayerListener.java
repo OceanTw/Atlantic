@@ -1,5 +1,7 @@
 package lol.oce.atlantis.listeners;
 
+import lol.oce.atlantis.Atlantis;
+import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.player.GamePlayer;
 import lol.oce.atlantis.player.PlayerManager;
 import org.bukkit.entity.Player;
@@ -13,6 +15,10 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        PlayerManager.getInstance().addPlayer(GamePlayer.createDefault(player));
+        if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
+
+        }
     }
+
+
 }

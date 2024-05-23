@@ -1,3 +1,9 @@
+storage: FILE #FILE or MONGO
+
+mongodb:
+  database:
+  uri:
+
 match:
   min-players-to-start: 40
   max-players: 100
