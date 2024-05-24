@@ -10,6 +10,7 @@ import lol.oce.atlantis.commands.MatchJoinCommand;
 import lol.oce.atlantis.commands.MatchStartCommand;
 import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.listeners.PlayerListener;
+import lol.oce.atlantis.utils.StringUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -78,8 +79,6 @@ public class Atlantis extends JavaPlugin {
                 .addInputStreamFromResource("data.yml")
                 .setDataType(DataType.SORTED)
                 .createConfig().addDefaultsFromInputStream();
-
-
 
         if (mainConfig.getString("storage").contains("MONGO")) {
             MongoManager.getInstance().load(mainConfig.getString("mongodb.uri"),
