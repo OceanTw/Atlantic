@@ -1,6 +1,6 @@
 messages:
   match:
-    join: "&a&l{0} &e&lhas joined the match! &7({1}/{2})"
+    join: "&b&l{0} &ehas joined the match! &7({1}/{2})"
     start: "&a&lMATCH STARTED!"
     end:
       - "&c&lMATCH ENDED!"
