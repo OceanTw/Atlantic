@@ -2,6 +2,7 @@ package lol.oce.atlantis.player;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.database.MongoManager;
+import lol.oce.atlantis.match.Match;
 import lol.oce.atlantis.types.PlayerStatus;
 import lombok.Getter;
 import org.bson.Document;
@@ -13,9 +14,10 @@ import java.util.List;
 
 public class PlayerManager {
 
-    @Getter
     List<GamePlayer> players = new ArrayList<>();
+
     HashMap<GamePlayer, PlayerStatus> playerStatus = new HashMap<>();
+    HashMap<GamePlayer, Match> playerMatch = new HashMap<>();
 
     @Getter
     private static PlayerManager instance = new PlayerManager();
@@ -51,4 +53,22 @@ public class PlayerManager {
             playerStatus.put(gamePlayer, status);
         }
     }
+
+    public void setPlayerMatch(GamePlayer gamePlayer, Match match) {
+        if (playerMatch.containsKey(gamePlayer)) {
+            playerMatch.replace(gamePlayer, match);
+        } else {
+            playerMatch.put(gamePlayer, match);
+        }
+    }
+
+    public Match getPlayerMatch(GamePlayer gamePlayer) {
+        return playerMatch.get(gamePlayer);
+    }
+
+    public PlayerStatus getPlayerStatus(GamePlayer gamePlayer) {
+        return playerStatus.get(gamePlayer);
+    }
+
+
 }

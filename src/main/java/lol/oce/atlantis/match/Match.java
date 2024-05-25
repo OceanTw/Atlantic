@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class Match {
     private List<GamePlayer> players;
 
     public void join(GamePlayer player) {
-        // Join the match
+
         players = players == null ? new ArrayList<>() : players;
         players.add(player);
         player.getPlayer().sendMessage(StringUtils.handleString(
@@ -38,7 +39,7 @@ public class Match {
     }
 
     public void end() {
-        // End the match
+
         players.forEach(player -> player.getPlayer().sendMessage(StringUtils.handleString(
                 Atlantis.getInstance().getMessagesConfig().getString("messages.match.end"),
                 "{0}", winner == null ? "DRAW" : winner.getPlayer().getName())));

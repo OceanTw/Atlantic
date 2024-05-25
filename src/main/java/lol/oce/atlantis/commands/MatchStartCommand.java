@@ -12,8 +12,6 @@ import lol.oce.atlantis.match.MatchType;
 import lol.oce.atlantis.utils.QuickUtils;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-
 @Command(name = "matchstart", aliases = {"s"})
 public class MatchStartCommand {
     @Execute

@@ -1,0 +1,19 @@
+scoreboards:
+  lobby:
+    title:
+    lines:
+    - "&bѕᴛᴀᴛѕ"
+    - "• &f&lKills: &b{kills}"
+    - "• &f&lWins: &b{wins}"
+    - "&bᴘʀᴏꜰɪʟᴇ"
+    - "• &f&lCoins: &b{coins}"
+    - "• &f&lLevel: &b{level}"
+    - "• &f&lExperience: &b{xp}"
+  game:
+    title:
+    - "&bᴍᴀᴛᴄʜ"
+    - "• &f&lNext stage: &b{stage} - {time}"
+    - "• &f&lPlayers remaining: &b{players}"
+    - "&bᴘʟᴀʏᴇʀ"
+    - "• &f&lKills: &b{kills}"
+    - "• &f&lDamage Dealt: &b{damage}"

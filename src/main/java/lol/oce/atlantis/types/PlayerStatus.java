@@ -4,6 +4,5 @@ public enum PlayerStatus {
     LOBBY,
     WAITING,
     PLAYING,
-    SPECTATING,
-    QUIT;
+    SPECTATING;
 }

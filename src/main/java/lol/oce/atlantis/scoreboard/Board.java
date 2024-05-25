@@ -1,6 +1,5 @@
 package lol.oce.atlantis.scoreboard;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -47,7 +46,9 @@ public class Board {
 
     public void setLine(final int line, String value) {
         final Line boardLine = getLine(line);
-        Validate.notNull(boardLine, "The index should be between 0 and 21");
+        if (boardLine == null) {
+            return;
+        }
 
         updateLine(boardLine, value);
 
@@ -84,7 +85,9 @@ public class Board {
 
     public void removeLine(int line) {
         final Line boardLine = getLine(line);
-        Validate.notNull(boardLine, "The index should be between 0 and 21");
+        if (boardLine == null) {
+            return;
+        }
         removeLine(boardLine);
     }
 

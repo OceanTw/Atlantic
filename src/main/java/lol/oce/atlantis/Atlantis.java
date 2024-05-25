@@ -2,7 +2,6 @@ package lol.oce.atlantis;
 
 import de.leonhard.storage.Config;
 import de.leonhard.storage.SimplixBuilder;
-import de.leonhard.storage.internal.settings.ConfigSettings;
 import de.leonhard.storage.internal.settings.DataType;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
@@ -10,7 +9,6 @@ import lol.oce.atlantis.commands.MatchJoinCommand;
 import lol.oce.atlantis.commands.MatchStartCommand;
 import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.listeners.PlayerListener;
-import lol.oce.atlantis.utils.StringUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
