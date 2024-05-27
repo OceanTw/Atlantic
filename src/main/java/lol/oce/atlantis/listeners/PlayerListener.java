@@ -40,9 +40,12 @@ public class PlayerListener implements Listener {
         Player killer = player.getKiller();
         if (killer != null) {
             GamePlayer killerGamePlayer = PlayerManager.getInstance().getGamePlayer(killer);
-            killerGamePlayer.getPersistencePlayerData().setKills(killerGamePlayer.getPersistencePlayerData().getKills() + 1);
+            killerGamePlayer
+                    .getPersistencePlayerData()
+                    .setKills(killerGamePlayer.getPersistencePlayerData()
+                            .getKills() + 1);
+            killerGamePlayer.save();
+            gamePlayer.save();
         }
     }
-
-
 }

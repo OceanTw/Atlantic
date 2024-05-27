@@ -5,8 +5,12 @@ import lol.oce.atlantis.player.GamePlayer;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
 import lol.oce.atlantis.utils.StringUtils;
+import lombok.Data;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
@@ -15,7 +19,10 @@ public class BoardManager {
     Board lobby;
     Board game;
 
-    public void load(GamePlayer player) {
+    @Getter
+    private static BoardManager instance = new BoardManager();
+
+    public void update(GamePlayer player) {
         PlayerStatus status = PlayerManager.getInstance().getPlayerStatus(player);
 
         if (status == PlayerStatus.LOBBY) {
@@ -45,8 +52,11 @@ public class BoardManager {
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 line = StringUtils.handleString(line,
-                        "{stage}", getStage(player),
-                        "{time}", getTime(player),
+                        "{stage}", PlayerManager.getInstance()
+                                .getPlayerMatch(player
+                        ).getStage().name(),
+                        "{time}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player)
+                                .getNextStageTime()),
                         "{players}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player).getPlayers().size()),
                         "{kills}", Integer.toString(player.getPersistencePlayerData().getKills()),
                         "{damage}", Integer.toString(player.getMatchPlayerData().getDamageDealt()));
@@ -58,14 +68,17 @@ public class BoardManager {
         }
     }
 
+    public void updateAll() {
+        BukkitTask task;
+        task = new BukkitRunnable() {
 
-    private String getStage(GamePlayer player) {
-
-        return "Stage 1";
+            @Override
+            public void run() {
+                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    update(PlayerManager.getInstance().getGamePlayer(player));
+                }
+            }
+        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20);
     }
 
-    private String getTime(GamePlayer player) {
-
-        return "10:00";
-    }
 }

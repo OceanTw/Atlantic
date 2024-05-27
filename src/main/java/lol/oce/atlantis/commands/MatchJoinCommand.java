@@ -6,7 +6,7 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import lol.oce.atlantis.match.MatchManager;
-import lol.oce.atlantis.match.MatchStatus;
+import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Player;

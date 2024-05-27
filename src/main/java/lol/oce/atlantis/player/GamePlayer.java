@@ -86,4 +86,18 @@ public class GamePlayer {
         PlayerManager.getInstance().addPlayer(new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0)));
         return new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0));
     }
+
+    public void save() {
+        Document document = new Document();
+        document.append("uuid", player.getUniqueId().toString());
+        document.append("name", player.getName());
+        document.append("kills", persistencePlayerData.getKills());
+        document.append("deaths", persistencePlayerData.getDeaths());
+        document.append("wins", persistencePlayerData.getWins());
+        document.append("games", persistencePlayerData.getGames());
+        document.append("level", persistencePlayerData.getLevel());
+        document.append("xp", persistencePlayerData.getXp());
+        document.append("coins", persistencePlayerData.getCoins());
+        MongoManager.getInstance().getCollection().insertOne(document);
+    }
 }

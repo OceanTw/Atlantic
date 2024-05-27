@@ -9,10 +9,15 @@ scoreboards:
     - "• &f&lCoins: &b{coins}"
     - "• &f&lLevel: &b{level}"
     - "• &f&lExperience: &b{xp}"
+  in-queue:
+    title:
+    lines:
+    - ""
   game:
     title:
+    lines:
     - "&bᴍᴀᴛᴄʜ"
-    - "• &f&lNext stage: &b{stage} - {time}"
+    - "• &f&l{stage} in {time}"
     - "• &f&lPlayers remaining: &b{players}"
     - "&bᴘʟᴀʏᴇʀ"
     - "• &f&lKills: &b{kills}"

@@ -9,6 +9,8 @@ import lol.oce.atlantis.commands.MatchJoinCommand;
 import lol.oce.atlantis.commands.MatchStartCommand;
 import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.listeners.PlayerListener;
+import lol.oce.atlantis.scoreboard.Board;
+import lol.oce.atlantis.scoreboard.BoardManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -39,6 +41,7 @@ public class Atlantis extends JavaPlugin {
         instance = this;
         getLogger().info("Atlantic enabled!");
 
+        // Commands
         this.liteCommands = LiteCommandsBukkit.builder()
                 .commands(
                         new MatchJoinCommand(),
@@ -46,7 +49,7 @@ public class Atlantis extends JavaPlugin {
                 )
                 .build();
 
-
+        // Configs
         mainConfig = SimplixBuilder
                 .fromFile(new File(getDataFolder(), "config.yml"))
                 .setName("config")
@@ -87,9 +90,11 @@ public class Atlantis extends JavaPlugin {
 
         }
 
-
+        // Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
+        // Scoreboards
+        BoardManager.getInstance().updateAll();
     }
 
     @Override
