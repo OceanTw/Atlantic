@@ -1,6 +1,5 @@
 package lol.oce.atlantis.match;
 
-
 import com.google.common.collect.Sets;
 import de.leonhard.storage.Config;
 import lol.oce.atlantis.Atlantis;
@@ -30,92 +29,55 @@ public class MatchManager {
     }
 
     public void countdown(Match match) {
-        Atlantis atlantis = Atlantis.getInstance();
-        Config mainConfig = atlantis.getMainConfig();
-
-        match.setStatus(MatchStatus.STARTING);
-
-        task = new BukkitRunnable() {
-            int seconds = mainConfig.getInt("match.countdown");
-
-            @Override
-            public void run() {
-                if (seconds == 0) {
-                    start(match);
-                    cancel();
-                    return;
-                }
-                seconds--;
-            }
-        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
-
+        executeTimedTask(match, MatchStatus.STARTING, "match.countdown", this::start);
     }
 
     public void start(Match match) {
-        Atlantis atlantis = Atlantis.getInstance();
-        Config mainConfig = atlantis.getMainConfig();
-
-        match.setStatus(MatchStatus.INGAME);
-
-        task = new BukkitRunnable() {
-            int seconds = mainConfig.getInt("match.duration");
-
-            @Override
-            public void run() {
-                if (seconds == 0) {
-                    deathMatch(match);
-                    cancel();
-                    return;
-                }
-                seconds--;
-            }
-        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
+        executeTimedTask(match, MatchStatus.INGAME, "match.duration", this::deathMatch);
     }
 
     public void deathMatch(Match match) {
-        Atlantis atlantis = Atlantis.getInstance();
-        Config mainConfig = atlantis.getMainConfig();
-
-        match.setStatus(MatchStatus.DEATHMATCH);
-
-        task = new BukkitRunnable() {
-            int seconds = mainConfig.getInt("match.deathmatch-duration");
-
-            @Override
-            public void run() {
-                if (seconds == 0) {
-                    end(match);
-                    cancel();
-                    return;
-                }
-                seconds--;
-            }
-        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
+        executeTimedTask(match, MatchStatus.DEATHMATCH, "match.deathmatch-duration", this::end);
     }
 
     public void end(Match match) {
-        Atlantis atlantis = Atlantis.getInstance();
+        executeTimedTask(match, MatchStatus.ENDING, 15, m -> {
+            matches.remove(m);
+            m.end();
+        });
+    }
 
-        match.setStatus(MatchStatus.ENDING);
+    public Optional<Match> findMatch(UUID uuid) {
+        return matches.stream().filter(match -> match.getUuid().equals(uuid)).findFirst();
+    }
+
+    private void executeTimedTask(Match match, MatchStatus status, String configPath, TaskCompletionHandler completionHandler) {
+        Atlantis atlantis = Atlantis.getInstance();
+        Config mainConfig = atlantis.getMainConfig();
+        int duration = mainConfig.getInt(configPath);
+        executeTimedTask(match, status, duration, completionHandler);
+    }
+
+    private void executeTimedTask(Match match, MatchStatus status, int duration, TaskCompletionHandler completionHandler) {
+        Atlantis atlantis = Atlantis.getInstance();
+        match.setStatus(status);
 
         task = new BukkitRunnable() {
-            int seconds = 15;
+            int seconds = duration;
 
             @Override
             public void run() {
                 if (seconds == 0) {
-                    matches.remove(match);
-                    match.end();
+                    completionHandler.complete(match);
                     cancel();
-                    return;
                 }
                 seconds--;
             }
         }.runTaskTimerAsynchronously(atlantis, 0, 20L);
     }
 
-    public Optional<Match> findMatch(UUID uuid) {
-        return matches.stream()
-                .filter(match -> match.getUuid().equals(uuid)).findFirst();
+    @FunctionalInterface
+    private interface TaskCompletionHandler {
+        void complete(Match match);
     }
 }

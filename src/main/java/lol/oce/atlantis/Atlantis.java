@@ -22,9 +22,9 @@ public class Atlantis extends JavaPlugin {
     @Getter
     private static Atlantis instance;
     @Getter
-    Storage storage = Storage.FILE;
+    private Storage storage = Storage.FILE;
     @Getter
-    Config mainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
+    private Config mainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
@@ -32,59 +32,10 @@ public class Atlantis extends JavaPlugin {
         instance = this;
         getLogger().info("Atlantic enabled!");
 
-        // Commands
-        this.liteCommands = LiteCommandsBukkit.builder()
-                .commands(
-                        new MatchJoinCommand(),
-                        new MatchStartCommand()
-                )
-                .build();
-
-        // Configs
-        mainConfig = SimplixBuilder
-                .fromFile(new File(getDataFolder(), "config.yml"))
-                .setName("config")
-                .addInputStreamFromResource("config.yml")
-                .setDataType(DataType.SORTED)
-                .createConfig().addDefaultsFromInputStream();
-        messagesConfig = SimplixBuilder
-                .fromFile(new File(getDataFolder(), "messages.yml"))
-                .setName("messages")
-                .addInputStreamFromResource("messages.yml")
-                .setDataType(DataType.SORTED)
-                .createConfig().addDefaultsFromInputStream();
-        kitsConfig = SimplixBuilder
-                .fromFile(new File(getDataFolder(), "kits.yml"))
-                .setName("kits")
-                .addInputStreamFromResource("kits.yml")
-                .setDataType(DataType.SORTED)
-                .createConfig().addDefaultsFromInputStream();
-        scoreboardsConfig = SimplixBuilder
-                .fromFile(new File(getDataFolder(), "scoreboards.yml"))
-                .setName("scoreboards")
-                .addInputStreamFromResource("scoreboards.yml")
-                .setDataType(DataType.SORTED)
-                .createConfig().addDefaultsFromInputStream();
-        dataConfig = SimplixBuilder
-                .fromFile(new File(getDataFolder(), "data.yml"))
-                .setName("data")
-                .addInputStreamFromResource("data.yml")
-                .setDataType(DataType.SORTED)
-                .createConfig().addDefaultsFromInputStream();
-
-        if (mainConfig.getString("storage").contains("MONGO")) {
-            MongoManager.getInstance().load(mainConfig.getString("mongodb.uri"),
-                    mainConfig.getString("mongodb.database"));
-            storage = Storage.MONGO;
-        } else {
-            storage = Storage.FILE;
-
-        }
-
-        // Listeners
-        Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-
-        // Scoreboards
+        registerCommands();
+        registerListeners();
+        loadConfigs();
+        configureStorage();
         BoardManager.getInstance().updateAll();
     }
 
@@ -94,9 +45,48 @@ public class Atlantis extends JavaPlugin {
         liteCommands.unregister();
     }
 
+    private void registerCommands() {
+        liteCommands = LiteCommandsBukkit.builder()
+                .commands(
+                        new MatchJoinCommand(),
+                        new MatchStartCommand()
+                )
+                .build();
+    }
+
+    private void loadConfigs() {
+        mainConfig = loadConfig("config.yml");
+        messagesConfig = loadConfig("messages.yml");
+        kitsConfig = loadConfig("kits.yml");
+        scoreboardsConfig = loadConfig("scoreboards.yml");
+        dataConfig = loadConfig("data.yml");
+    }
+
+    private Config loadConfig(String fileName) {
+        return SimplixBuilder
+                .fromFile(new File(getDataFolder(), fileName))
+                .setName(fileName.replace(".yml", ""))
+                .addInputStreamFromResource(fileName)
+                .setDataType(DataType.SORTED)
+                .createConfig().addDefaultsFromInputStream();
+    }
+
+    private void configureStorage() {
+        if (mainConfig.getString("storage").contains("MONGO")) {
+            MongoManager.getInstance().load(mainConfig.getString("mongodb.uri"),
+                    mainConfig.getString("mongodb.database"));
+            storage = Storage.MONGO;
+        } else {
+            storage = Storage.FILE;
+        }
+    }
+
+    private void registerListeners() {
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+    }
+
     @Getter
     public enum Storage {
         FILE, MONGO
     }
-
 }
