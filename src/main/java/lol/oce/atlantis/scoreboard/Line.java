@@ -1,17 +1,21 @@
 package lol.oce.atlantis.scoreboard;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.scoreboard.Team;
 
-class Line {
+import java.util.Optional;
+
+@Getter
+@Setter
+public class Line {
     private final String defaultEntry;
-    private String fixColor = "";
-
-    private Team team;
     private final int line;
+    private String fixColor = "";
+    private final Team team;
+    private boolean set = false;
 
-    private boolean isSet = false;
-
-    Line(String entry, Team team, int line) {
+    public Line(String entry, Team team, int line) {
         this.team = team;
         this.line = line;
         this.defaultEntry = entry;
@@ -20,38 +24,17 @@ class Line {
     }
 
     private void updateEntry() {
-        if (defaultEntry != null) {
-            team.removeEntry(getEntry());
-        }
-        team.addEntry(getEntry());
+        Optional.ofNullable(defaultEntry).ifPresentOrElse(
+                entry -> team.removeEntry(getEntry()), () -> team.addEntry(getEntry())
+        );
     }
 
-    void fixColor(String color) {
+    public void fixColor(String color) {
         fixColor = color;
         updateEntry();
     }
 
-    String getFixColor() {
-        return fixColor;
-    }
-
-    String getEntry() {
+    public String getEntry() {
         return defaultEntry + fixColor;
-    }
-
-    Team getTeam() {
-        return team;
-    }
-
-    int getLine() {
-        return line;
-    }
-
-    boolean isSet() {
-        return isSet;
-    }
-
-    void setSet(boolean set) {
-        isSet = set;
     }
 }

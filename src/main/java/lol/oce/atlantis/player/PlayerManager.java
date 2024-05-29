@@ -14,13 +14,11 @@ import java.util.List;
 
 public class PlayerManager {
 
+    @Getter
+    private static final PlayerManager instance = new PlayerManager();
     List<GamePlayer> players = new ArrayList<>();
-
     HashMap<GamePlayer, PlayerStatus> playerStatus = new HashMap<>();
     HashMap<GamePlayer, Match> playerMatch = new HashMap<>();
-
-    @Getter
-    private static PlayerManager instance = new PlayerManager();
 
     public GamePlayer getGamePlayer(Player player) {
         return players.stream()
