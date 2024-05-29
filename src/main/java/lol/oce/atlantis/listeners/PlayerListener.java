@@ -3,6 +3,8 @@ package lol.oce.atlantis.listeners;
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.player.GamePlayer;
 import lol.oce.atlantis.player.PlayerManager;
+import lol.oce.atlantis.scoreboard.BoardManager;
+import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,9 +19,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO) {
             if (!PlayerManager.getInstance().isPlayerExists(player)) {
-                GamePlayer.createDefault(player);
+                GamePlayer gamePlayer = GamePlayer.createDefault(player);
+                PlayerManager.getInstance().setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
+                BoardManager.getInstance().update(gamePlayer);
             } else {
-                GamePlayer.create(player.getUniqueId(), player);
+                GamePlayer gamePlayer = GamePlayer.create(player.getUniqueId(), player);
+                PlayerManager.getInstance().setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
+                BoardManager.getInstance().update(gamePlayer);
             }
         }
     }

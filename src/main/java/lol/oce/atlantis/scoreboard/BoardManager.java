@@ -4,6 +4,7 @@ import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.player.GamePlayer;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
+import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
 import lombok.Data;
 import lombok.Getter;
@@ -54,7 +55,7 @@ public class BoardManager {
                 line = StringUtils.handleString(line,
                         "{stage}", PlayerManager.getInstance()
                                 .getPlayerMatch(player
-                        ).getStage().name(),
+                                ).getStage().name(),
                         "{time}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player)
                                 .getNextStageTime()),
                         "{players}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player).getPlayers().size()),
@@ -69,16 +70,9 @@ public class BoardManager {
     }
 
     public void updateAll() {
-        BukkitTask task;
-        task = new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    update(PlayerManager.getInstance().getGamePlayer(player));
-                }
-            }
-        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20);
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            update(PlayerManager.getInstance().getGamePlayer(player));
+        }
     }
 
 }
