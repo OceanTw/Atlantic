@@ -10,22 +10,25 @@ import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 @Command(name = "matchjoin", aliases = {"j"})
 public class MatchJoinCommand {
     @Execute
+    @SuppressWarnings("unused")
     @Permission("atlantic.admin")
-    public void execute(@Context Player player, @OptionalArg String matchId) {
-        if (matchId == null) {
+    public void execute(@Context Player player, @Nullable @OptionalArg String matchId) {
+        Optional.ofNullable(matchId).map(matchId1 -> PlayerManager.getInstance()).ifPresent(playerManager -> {
 
+            // TODO: filter: match id equals, maybe?
             MatchManager.getInstance().getMatches().stream()
                     .filter(match -> match.getStatus().equals(MatchStatus.WAITING))
                     .findFirst()
-                    .ifPresent(match -> match.join(PlayerManager.getInstance().getGamePlayer(player)));
-            PlayerManager.getInstance().setPlayerStatus(PlayerManager.getInstance().getGamePlayer(player),
-                    PlayerStatus.WAITING);
-        } else {
+                    .ifPresent(match -> match.join(playerManager.getGamePlayer(player)));
 
-        }
+            playerManager.setPlayerStatus(playerManager.getGamePlayer(player), PlayerStatus.WAITING);
+        });
     }
 }

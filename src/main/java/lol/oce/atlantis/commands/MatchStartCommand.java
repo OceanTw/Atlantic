@@ -15,11 +15,21 @@ import org.bukkit.entity.Player;
 @Command(name = "matchstart", aliases = {"s"})
 public class MatchStartCommand {
     @Execute
+    @SuppressWarnings("unused")
     @Permission("atlantic.admin")
     public void execute(@Context Player player, @Arg MatchType type) {
-        QuickUtils.debug("Player " + player.getName() + " started a match of type " + type.name());
-        Match match = Match.builder().setType(type).setStatus(MatchStatus.WAITING).setPvp(false).build();
+        String typeName = type.name();
+
+        QuickUtils.debug("Player " + player.getName() + " started a match of type " + typeName);
+
+        Match match = Match.builder()
+                .setType(type)
+                .setStatus(MatchStatus.WAITING)
+                .setPvp(false)
+                .build();
+
         MatchManager.getInstance().create(match);
-        player.sendMessage("Match created with ID " + match.getUuid() + " and type " + type.name() + ".");
+
+        player.sendMessage("Match created with ID " + match.getUuid() + " and type " + typeName + ".");
     }
 }

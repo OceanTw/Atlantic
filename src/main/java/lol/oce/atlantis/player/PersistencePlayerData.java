@@ -2,9 +2,11 @@ package lol.oce.atlantis.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@Accessors(chain=true)
 public class PersistencePlayerData {
     private int kills;
     private int deaths;

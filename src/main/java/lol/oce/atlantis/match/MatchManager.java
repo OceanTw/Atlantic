@@ -2,9 +2,12 @@ package lol.oce.atlantis.match;
 
 
 import com.google.common.collect.Sets;
+import de.leonhard.storage.Config;
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.match.types.MatchStatus;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -12,25 +15,28 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchManager {
-
-    private BukkitTask task;
+    @Getter
+    private static final MatchManager instance = new MatchManager();
 
     @Getter
     private final Set<Match> matches = Sets.newConcurrentHashSet();
 
-    @Getter
-    private final static MatchManager instance = new MatchManager();
+    private BukkitTask task;
 
     public void create(Match match) {
         matches.add(match);
     }
 
     public void countdown(Match match) {
+        Atlantis atlantis = Atlantis.getInstance();
+        Config mainConfig = atlantis.getMainConfig();
+
         match.setStatus(MatchStatus.STARTING);
 
         task = new BukkitRunnable() {
-            int seconds = Atlantis.getInstance().getMainConfig().getInt("match.countdown");
+            int seconds = mainConfig.getInt("match.countdown");
 
             @Override
             public void run() {
@@ -41,32 +47,39 @@ public class MatchManager {
                 }
                 seconds--;
             }
-        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20L);
+        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
 
     }
 
     public void start(Match match) {
+        Atlantis atlantis = Atlantis.getInstance();
+        Config mainConfig = atlantis.getMainConfig();
+
         match.setStatus(MatchStatus.INGAME);
 
         task = new BukkitRunnable() {
-            int seconds = Atlantis.getInstance().getMainConfig().getInt("match.duration");
+            int seconds = mainConfig.getInt("match.duration");
 
             @Override
             public void run() {
                 if (seconds == 0) {
-                    deathmatch(match);
+                    deathMatch(match);
                     cancel();
                     return;
                 }
                 seconds--;
             }
-        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20L);
+        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
     }
 
-    public void deathmatch(Match match) {
+    public void deathMatch(Match match) {
+        Atlantis atlantis = Atlantis.getInstance();
+        Config mainConfig = atlantis.getMainConfig();
+
         match.setStatus(MatchStatus.DEATHMATCH);
+
         task = new BukkitRunnable() {
-            int seconds = Atlantis.getInstance().getMainConfig().getInt("match.deathmatch-duration");
+            int seconds = mainConfig.getInt("match.deathmatch-duration");
 
             @Override
             public void run() {
@@ -77,11 +90,14 @@ public class MatchManager {
                 }
                 seconds--;
             }
-        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20L);
+        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
     }
 
     public void end(Match match) {
+        Atlantis atlantis = Atlantis.getInstance();
+
         match.setStatus(MatchStatus.ENDING);
+
         task = new BukkitRunnable() {
             int seconds = 15;
 
@@ -95,10 +111,11 @@ public class MatchManager {
                 }
                 seconds--;
             }
-        }.runTaskTimerAsynchronously(Atlantis.getInstance(), 0, 20L);
+        }.runTaskTimerAsynchronously(atlantis, 0, 20L);
     }
 
     public Optional<Match> findMatch(UUID uuid) {
-        return matches.parallelStream().filter(match -> match.getUuid().equals(uuid)).findFirst();
+        return matches.stream()
+                .filter(match -> match.getUuid().equals(uuid)).findFirst();
     }
 }

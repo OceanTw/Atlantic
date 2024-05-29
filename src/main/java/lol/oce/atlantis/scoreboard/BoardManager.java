@@ -1,78 +1,104 @@
 package lol.oce.atlantis.scoreboard;
 
+import de.leonhard.storage.Config;
 import lol.oce.atlantis.Atlantis;
+import lol.oce.atlantis.match.Match;
 import lol.oce.atlantis.player.GamePlayer;
+import lol.oce.atlantis.player.PersistencePlayerData;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
-import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
-import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
 public class BoardManager {
 
-    Board lobby;
-    Board game;
-
     @Getter
-    private static BoardManager instance = new BoardManager();
+    private static final BoardManager instance = new BoardManager();
 
-    public void update(GamePlayer player) {
-        PlayerStatus status = PlayerManager.getInstance().getPlayerStatus(player);
+    public Board lobby;
+    public Board game;
+
+    public void update(GamePlayer gamePlayer) {
+        Atlantis atlantis = Atlantis.getInstance();
+        Config scoreboardsConfig = atlantis.getScoreboardsConfig();
+
+        PlayerManager playerManager = PlayerManager.getInstance();
+        PlayerStatus status = playerManager.getPlayerStatus(gamePlayer);
+
+        Player player = gamePlayer.getPlayer();
+        PersistencePlayerData persistencePlayerData = gamePlayer.getPersistencePlayerData();
 
         if (status == PlayerStatus.LOBBY) {
-            lobby = new Board(Atlantis.getInstance().getScoreboardsConfig().getString("scoreboards.lobby.title"));
-            List<String> lines = Atlantis.getInstance().getScoreboardsConfig().getStringList("scoreboards.lobby.lines");
+            lobby = new Board(scoreboardsConfig.getString("scoreboards.lobby.title"));
+            List<String> lines = scoreboardsConfig.getStringList("scoreboards.lobby.lines");
 
             for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                line = StringUtils.handleString(line,
-                        "{kills}", Integer.toString(player.getPersistencePlayerData().getKills()),
-                        "{wins}", Integer.toString(player.getPersistencePlayerData().getWins()),
-                        "{coins}", Integer.toString(player.getPersistencePlayerData().getCoins()),
-                        "{level}", Integer.toString(player.getPersistencePlayerData().getLevel()),
-                        "{xp}", Integer.toString(player.getPersistencePlayerData().getXp())
+                lobby.setLine(
+                        i,
+                        StringUtils.handleString(
+                                lines.get(i),
+
+                                "{kills}",
+                                Integer.toString(persistencePlayerData.getKills()),
+
+                                "{wins}",
+                                Integer.toString(persistencePlayerData.getWins()),
+
+                                "{coins}",
+                                Integer.toString(persistencePlayerData.getCoins()),
+
+                                "{level}",
+                                Integer.toString(persistencePlayerData.getLevel()),
+
+                                "{xp}",
+                                Integer.toString(persistencePlayerData.getXp())
+                        )
                 );
-                lobby.setLine(i, line);
             }
 
-
-            lobby.show(player.getPlayer());
+            lobby.show(player);
         }
 
         if (status == PlayerStatus.PLAYING) {
-            game = new Board(Atlantis.getInstance().getScoreboardsConfig().getString("scoreboards.game.title"));
-            List<String> lines = Atlantis.getInstance().getScoreboardsConfig().getStringList("scoreboards.game.lines");
+            Match playerMatch = playerManager.getPlayerMatch(gamePlayer);
+
+            game = new Board(scoreboardsConfig.getString("scoreboards.game.title"));
+            List<String> lines = scoreboardsConfig.getStringList("scoreboards.game.lines");
 
             for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                line = StringUtils.handleString(line,
-                        "{stage}", PlayerManager.getInstance()
-                                .getPlayerMatch(player
-                                ).getStage().name(),
-                        "{time}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player)
-                                .getNextStageTime()),
-                        "{players}", Integer.toString(PlayerManager.getInstance().getPlayerMatch(player).getPlayers().size()),
-                        "{kills}", Integer.toString(player.getPersistencePlayerData().getKills()),
-                        "{damage}", Integer.toString(player.getMatchPlayerData().getDamageDealt()));
-                game.setLine(i, line);
+                game.setLine(
+                        i,
+                        StringUtils.handleString(
+                                lines.get(i),
+
+                                "{stage}",
+                                playerMatch.getStage().name(),
+
+                                "{time}",
+                                Integer.toString(playerMatch.getNextStageTime()),
+
+                                "{players}",
+                                Integer.toString(playerMatch.getPlayers().size()),
+
+                                "{kills}",
+                                Integer.toString(persistencePlayerData.getKills()),
+
+                                "{damage}",
+                                Integer.toString(gamePlayer.getMatchPlayerData().getDamageDealt())
+                        )
+                );
             }
 
 
-            game.show(player.getPlayer());
+            game.show(player);
         }
     }
 
     public void updateAll() {
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            update(PlayerManager.getInstance().getGamePlayer(player));
-        }
+        Bukkit.getServer().getOnlinePlayers().forEach(player -> update(PlayerManager.getInstance().getGamePlayer(player)));
     }
-
 }

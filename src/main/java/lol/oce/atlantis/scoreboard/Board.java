@@ -12,15 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// TODO: plan 4 code refactoring
 public class Board {
-    private static int count = 0;
     private static final List<ChatColor> COLORS = Arrays.asList(ChatColor.values());
-
+    private static int count = 0;
     private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     private final Objective objective;
-
-    private String title;
     private final List<Line> lines = new ArrayList<>();
+    private String title;
 
     public Board(String title) {
         objective = scoreboard.registerNewObjective("scorelib" + count++, "dummy");
@@ -28,7 +27,7 @@ public class Board {
 
         setTitle(title);
 
-        for(int i = 0; i < COLORS.size(); ++i) {
+        for (int i = 0; i < COLORS.size(); ++i) {
             final ChatColor color = COLORS.get(i);
 
             final Team team = scoreboard.registerNewTeam("line" + i);

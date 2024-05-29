@@ -9,7 +9,6 @@ import lol.oce.atlantis.commands.MatchJoinCommand;
 import lol.oce.atlantis.commands.MatchStartCommand;
 import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.listeners.PlayerListener;
-import lol.oce.atlantis.scoreboard.Board;
 import lol.oce.atlantis.scoreboard.BoardManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -22,18 +21,10 @@ public class Atlantis extends JavaPlugin {
 
     @Getter
     private static Atlantis instance;
-
-    @Getter
-    public enum Storage {
-        FILE, MONGO
-    }
-
     @Getter
     Storage storage = Storage.FILE;
-
     @Getter
     Config mainConfig, messagesConfig, kitsConfig, scoreboardsConfig, dataConfig;
-
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
@@ -101,6 +92,11 @@ public class Atlantis extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Atlantic disabled!");
         liteCommands.unregister();
+    }
+
+    @Getter
+    public enum Storage {
+        FILE, MONGO
     }
 
 }
