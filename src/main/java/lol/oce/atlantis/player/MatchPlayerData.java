@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MatchPlayerData {
     private int kills;
-    private int damageDealt;
+    private double damageDealt;
 
     public static MatchPlayerData createDefault() {
         return new MatchPlayerData(0, 0);

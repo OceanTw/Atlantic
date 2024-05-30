@@ -6,9 +6,12 @@ import lol.oce.atlantis.player.PersistencePlayerData;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.scoreboard.BoardManager;
 import lol.oce.atlantis.types.PlayerStatus;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -67,6 +70,20 @@ public class PlayerListener implements Listener {
 
             gamePlayer.save();
             killerGamePlayer.save();
+        });
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        Optional<Entity> damagerOptional = Optional.of(event.getEntity());
+
+        damagerOptional.ifPresent(player -> {
+            if (player instanceof Player) {
+                if (PlayerManager.getInstance().getPlayerMatch(PlayerManager.getInstance().getGamePlayer((Player) player)) == null) {
+                    event.setCancelled(true);
+                }
+                PlayerManager.getInstance().getGamePlayer(((Player) player).getPlayer()).getMatchPlayerData().setDamageDealt(event.getDamage());
+            }
         });
     }
 }

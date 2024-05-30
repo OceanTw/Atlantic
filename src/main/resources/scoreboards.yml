@@ -2,23 +2,32 @@ scoreboards:
   lobby:
     title:
     lines:
-    - "&bѕᴛᴀᴛѕ"
-    - "• &f&lKills: &b{kills}"
-    - "• &f&lWins: &b{wins}"
-    - "&bᴘʀᴏꜰɪʟᴇ"
-    - "• &f&lCoins: &b{coins}"
-    - "• &f&lLevel: &b{level}"
-    - "• &f&lExperience: &b{xp}"
+      - "&bѕᴛᴀᴛѕ"
+      - "| &f&lKills: &b{kills}"
+      - "| &f&lWins: &b{wins}"
+      - "&bᴘʀᴏꜰɪʟᴇ"
+      - "| &f&lCoins: &b{coins}"
+      - "| &f&lLevel: &b{level}"
+      - "| &f&lExperience: &b{xp}"
   in-queue:
     title:
     lines:
-    - ""
+      - "&bѕᴛᴀᴛѕ"
+      - "| &f&lKills: &b{kills}"
+      - "| &f&lWins: &b{wins}"
+      - "&bᴘʀᴏꜰɪʟᴇ"
+      - "| &f&lCoins: &b{coins}"
+      - "| &f&lLevel: &b{level}"
+      - "| &f&lExperience: &b{xp}"
+      - "&bɪɴ ǫᴜᴇᴜᴇ"
+      - "| &f&lMode: &b{mode}"
+      - "| &f&lPlayers: &b{players}/{maxplayers}"
   game:
     title:
     lines:
-    - "&bᴍᴀᴛᴄʜ"
-    - "• &f&l{stage} in {time}"
-    - "• &f&lPlayers remaining: &b{players}"
-    - "&bᴘʟᴀʏᴇʀ"
-    - "• &f&lKills: &b{kills}"
-    - "• &f&lDamage Dealt: &b{damage}"
+      - "&bᴍᴀᴛᴄʜ"
+      - " &f&l{stage} in {time}"
+      - " &f&lPlayers remaining: &b{players}"
+      - "&bᴘʟᴀʏᴇʀ"
+      - " &f&lKills: &b{kills}"
+      - " &f&lDamage Dealt: &b{damage}"

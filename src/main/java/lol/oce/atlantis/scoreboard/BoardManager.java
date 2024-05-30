@@ -8,7 +8,6 @@ import lol.oce.atlantis.player.PersistencePlayerData;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
 import lol.oce.atlantis.utils.StringUtils;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -16,11 +15,14 @@ import java.util.List;
 
 public class BoardManager {
 
-    @Getter
     private static final BoardManager instance = new BoardManager();
 
-    public Board lobby;
-    public Board game;
+    public static BoardManager getInstance() {
+        return instance;
+    }
+
+    private Board lobby;
+    private Board game;
 
     public void update(GamePlayer gamePlayer) {
         Atlantis atlantis = Atlantis.getInstance();
@@ -32,69 +34,51 @@ public class BoardManager {
         Player player = gamePlayer.getPlayer();
         PersistencePlayerData persistencePlayerData = gamePlayer.getPersistencePlayerData();
 
-        if (status == PlayerStatus.LOBBY) {
-            lobby = new Board(scoreboardsConfig.getString("scoreboards.lobby.title"));
-            List<String> lines = scoreboardsConfig.getStringList("scoreboards.lobby.lines");
+        switch (status) {
+            case LOBBY, IN_QUEUE -> {
+                String scoreboardKey = status == PlayerStatus.LOBBY ? "lobby" : "in-queue";
+                lobby = new Board(scoreboardsConfig.getString("scoreboards." + scoreboardKey + ".title"));
+                List<String> lines = scoreboardsConfig.getStringList("scoreboards." + scoreboardKey + ".lines");
 
-            for (int i = 0; i < lines.size(); i++) {
-                lobby.setLine(
-                        i,
-                        StringUtils.handleString(
-                                lines.get(i),
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = StringUtils.handleString(lines.get(i),
+                            "{kills}", Integer.toString(persistencePlayerData.getKills()),
+                            "{wins}", Integer.toString(persistencePlayerData.getWins()),
+                            "{coins}", Integer.toString(persistencePlayerData.getCoins()),
+                            "{level}", Integer.toString(persistencePlayerData.getLevel()),
+                            "{xp}", Integer.toString(persistencePlayerData.getXp()));
 
-                                "{kills}",
-                                Integer.toString(persistencePlayerData.getKills()),
+                    if (status == PlayerStatus.IN_QUEUE && i == lines.size() - 3) {
+                        Match playerMatch = playerManager.getPlayerMatch(gamePlayer);
+                        line = StringUtils.handleString(line,
+                                "{mode}", playerMatch.getType().name(),
+                                "{players}", Integer.toString(playerMatch.getPlayers().size()),
+                                "{maxplayers}", Integer.toString(atlantis.getMainConfig().getInt("match.max-players")));
+                    }
 
-                                "{wins}",
-                                Integer.toString(persistencePlayerData.getWins()),
+                    lobby.setLine(i, line);
+                }
 
-                                "{coins}",
-                                Integer.toString(persistencePlayerData.getCoins()),
 
-                                "{level}",
-                                Integer.toString(persistencePlayerData.getLevel()),
-
-                                "{xp}",
-                                Integer.toString(persistencePlayerData.getXp())
-                        )
-                );
+                lobby.show(player);
             }
+            case PLAYING -> {
+                Match playerMatch = playerManager.getPlayerMatch(gamePlayer);
 
-            lobby.show(player);
-        }
+                game = new Board(scoreboardsConfig.getString("scoreboards.game.title"));
+                List<String> lines = scoreboardsConfig.getStringList("scoreboards.game.lines");
 
-        if (status == PlayerStatus.PLAYING) {
-            Match playerMatch = playerManager.getPlayerMatch(gamePlayer);
+                for (int i = 0; i < lines.size(); i++) {
+                    game.setLine(i, StringUtils.handleString(lines.get(i),
+                            "{stage}", playerMatch.getStage().name(),
+                            "{time}", Integer.toString(playerMatch.getNextStageTime()),
+                            "{players}", Integer.toString(playerMatch.getPlayers().size()),
+                            "{kills}", Integer.toString(gamePlayer.getMatchPlayerData().getKills()),
+                            "{damage}", Double.toString(gamePlayer.getMatchPlayerData().getDamageDealt())));
+                }
 
-            game = new Board(scoreboardsConfig.getString("scoreboards.game.title"));
-            List<String> lines = scoreboardsConfig.getStringList("scoreboards.game.lines");
-
-            for (int i = 0; i < lines.size(); i++) {
-                game.setLine(
-                        i,
-                        StringUtils.handleString(
-                                lines.get(i),
-
-                                "{stage}",
-                                playerMatch.getStage().name(),
-
-                                "{time}",
-                                Integer.toString(playerMatch.getNextStageTime()),
-
-                                "{players}",
-                                Integer.toString(playerMatch.getPlayers().size()),
-
-                                "{kills}",
-                                Integer.toString(persistencePlayerData.getKills()),
-
-                                "{damage}",
-                                Integer.toString(gamePlayer.getMatchPlayerData().getDamageDealt())
-                        )
-                );
+                game.show(player);
             }
-
-
-            game.show(player);
         }
     }
 

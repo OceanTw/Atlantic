@@ -2,7 +2,7 @@ package lol.oce.atlantis.types;
 
 public enum PlayerStatus {
     LOBBY,
-    WAITING,
+    IN_QUEUE,
     PLAYING,
     SPECTATING
 }
