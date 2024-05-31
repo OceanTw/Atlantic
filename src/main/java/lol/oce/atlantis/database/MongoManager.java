@@ -22,12 +22,8 @@ public class MongoManager {
     private MongoCollection<Document> collection;
 
     public void load(String uri, String database) {
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(uri))
-                .build();
-
         @Cleanup
-        MongoClient mongoClient = MongoClients.create(settings);
+        MongoClient mongoClient = MongoClients.create(uri);
         MongoDatabase db = mongoClient.getDatabase(database);
         collection = db.getCollection(database);
     }
