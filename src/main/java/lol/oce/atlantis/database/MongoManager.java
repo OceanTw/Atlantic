@@ -22,9 +22,11 @@ public class MongoManager {
     private MongoCollection<Document> collection;
 
     public void load(String uri, String database) {
-        @Cleanup
-        MongoClient mongoClient = MongoClients.create(uri);
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(uri))
+                .build();
+        MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase db = mongoClient.getDatabase(database);
-        collection = db.getCollection(database);
+        collection = db.getCollection("Atlantic");
     }
 }
