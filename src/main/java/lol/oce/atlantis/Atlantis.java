@@ -63,6 +63,7 @@ public class Atlantis extends JavaPlugin {
     }
 
     private Config loadConfig(String fileName) {
+
         return SimplixBuilder
                 .fromFile(new File(getDataFolder(), fileName))
                 .setName(fileName.replace(".yml", ""))

@@ -1,6 +1,6 @@
 storage: "FILE" #FILE or MONGO
 mongodb:
-  database: "atlantic"
+  database: "Atlantis"
   uri: ""
 match:
   min-players-to-start: 40
