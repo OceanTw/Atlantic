@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import lombok.AccessLevel;
-import lombok.Cleanup;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +26,6 @@ public class MongoManager {
                 .build();
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase db = mongoClient.getDatabase(database);
-        collection = db.getCollection("Atlantic");
+        collection = db.getCollection("Atlantis");
     }
 }

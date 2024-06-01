@@ -4,8 +4,9 @@ import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.match.Match;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.player.GamePlayer;
-import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.player.PersistencePlayerData;
+import lol.oce.atlantis.player.PlayerManager;
+import lol.oce.atlantis.types.PlayerStatus;
 import lol.oce.atlantis.utils.StringUtils;
 import lol.oce.atlantis.utils.scoreboards.AssembleAdapter;
 import org.bukkit.entity.Player;
@@ -18,6 +19,9 @@ public class ScoreboardAdapter implements AssembleAdapter {
     @Override
     public String getTitle(Player player) {
         GamePlayer gamePlayer = PlayerManager.getInstance().getGamePlayer(player);
+        if (PlayerManager.getInstance().getPlayerStatus(gamePlayer) == null) {
+            PlayerManager.getInstance().setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
+        }
         switch (PlayerManager.getInstance().getPlayerStatus(gamePlayer)) {
             case LOBBY:
                 return Atlantis.getInstance().getScoreboardsConfig().getString("scoreboards.lobby.title");

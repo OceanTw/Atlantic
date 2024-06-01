@@ -10,6 +10,7 @@ import lol.oce.atlantis.match.MatchManager;
 import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.utils.QuickUtils;
+import lol.oce.atlantis.utils.StringUtils;
 import org.bukkit.entity.Player;
 
 @Command(name = "matchstart", aliases = {"s"})
@@ -20,16 +21,15 @@ public class MatchStartCommand {
     public void execute(@Context Player player, @Arg MatchType type) {
         String typeName = type.name();
 
-        QuickUtils.debug("Player " + player.getName() + " started a match of type " + typeName);
-
         Match match = Match.builder()
                 .setType(type)
                 .setStatus(MatchStatus.WAITING)
                 .setPvp(false)
                 .build();
 
+        QuickUtils.debug("Player " + player.getName() + " started a match of type " + typeName + " UUID: " + match.getUuid() + "!");
         MatchManager.getInstance().create(match);
 
-        player.sendMessage("Match created with ID " + match.getUuid() + " and type " + typeName + ".");
+        player.sendMessage(StringUtils.handleString("&aMatch of type " + typeName + " &astarted!"));
     }
 }

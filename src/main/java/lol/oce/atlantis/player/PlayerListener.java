@@ -1,11 +1,9 @@
 package lol.oce.atlantis.player;
 
-import lol.oce.atlantis.Atlantis;
-import lol.oce.atlantis.scoreboards.ScoreboardAdapter;
-import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -17,22 +15,10 @@ import java.util.UUID;
 
 public class PlayerListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUID playerUniqueId = player.getUniqueId();
-
-        Atlantis atlantis = Atlantis.getInstance();
-        Atlantis.Storage storage = atlantis.getStorage();
-
-        PlayerManager playerManager = PlayerManager.getInstance();
-
-        if (storage == Atlantis.Storage.MONGO) {
-            GamePlayer gamePlayer = playerManager.isPlayerExists(player) ?
-                    GamePlayer.create(playerUniqueId, player) : GamePlayer.createDefault(player);
-
-            playerManager.setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
-        }
+        GamePlayer gamePlayer = GamePlayer.create(player);
     }
 
     @EventHandler
@@ -62,8 +48,7 @@ public class PlayerListener implements Listener {
             killerPersistencePlayerData
                     .setKills(killerPersistencePlayerData.getKills() + 1);
 
-            gamePlayer.save();
-            killerGamePlayer.save();
+            // TODO: set stats
         });
     }
 

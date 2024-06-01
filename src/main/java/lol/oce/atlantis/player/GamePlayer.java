@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import de.leonhard.storage.Config;
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.database.MongoManager;
+import lol.oce.atlantis.types.PlayerStatus;
 import lol.oce.atlantis.utils.QuickUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class GamePlayer {
     PersistencePlayerData persistencePlayerData;
     MatchPlayerData matchPlayerData;
 
-    public static GamePlayer createDefault(Player player) {
+    public static GamePlayer create(Player player) {
         Atlantis atlantis = Atlantis.getInstance();
         Config dataConfig = atlantis.getDataConfig();
         PlayerManager playerManager = PlayerManager.getInstance();
@@ -33,34 +34,39 @@ public class GamePlayer {
         GamePlayer gamePlayer = new GamePlayer(
                 playerUniqueId, player, PersistencePlayerData.createDefault(), new MatchPlayerData(0, 0)
         );
-
-        saveToConfig(dataConfig, dataConfigPrefix, player);
-        atlantis.saveConfig();
-
         playerManager.addPlayer(gamePlayer);
+        PlayerManager.getInstance().setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
 
-        if (atlantis.getStorage() == Atlantis.Storage.MONGO) {
-            saveToMongo(player);
+        if (playerManager.isPlayerExists(player)) {
+            gamePlayer.update();
+        } else {
+            if (atlantis.getStorage() == Atlantis.Storage.FILE) {
+                saveToConfig(dataConfig, dataConfigPrefix, player);
+                atlantis.saveConfig();
+            }
+            if (atlantis.getStorage() == Atlantis.Storage.MONGO) {
+                saveToMongo(player);
+            }
         }
-
         return gamePlayer;
     }
 
-    public static GamePlayer create(UUID uuid, Player player) {
-        Atlantis atlantis = Atlantis.getInstance();
-        PlayerManager playerManager = PlayerManager.getInstance();
+//    public static GamePlayer created(UUID uuid, Player player) {
+//        Atlantis atlantis = Atlantis.getInstance();
+//        PlayerManager playerManager = PlayerManager.getInstance();
+//
+//        PersistencePlayerData persistencePlayerData = atlantis.getStorage() == Atlantis.Storage.MONGO
+//                ? loadFromMongo(uuid)
+//                : loadFromConfig(atlantis.getDataConfig(), "players." + uuid);
+//
+//
+//
+//        playerManager.addPlayer(new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0)));
+//        return new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0));
+//    }
 
-        PersistencePlayerData persistencePlayerData = atlantis.getStorage() == Atlantis.Storage.MONGO
-                ? loadFromMongo(uuid)
-                : PersistencePlayerData.createDefault();
-
-        playerManager.addPlayer(new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0)));
-        return new GamePlayer(uuid, player, persistencePlayerData, new MatchPlayerData(0, 0));
-    }
-
-    public GamePlayer save() {
-        saveToMongo(player);
-        return this;
+    public void update() {
+        this.persistencePlayerData = Atlantis.getInstance().getStorage() == Atlantis.Storage.MONGO ? loadFromMongo(uuid) : loadFromConfig(Atlantis.getInstance().getDataConfig(), "players." + uuid);
     }
 
     private static void saveToConfig(Config config, String prefix, Player player) {
@@ -114,5 +120,17 @@ public class GamePlayer {
 
         QuickUtils.info("New player detected, creating default data");
         return PersistencePlayerData.createDefault();
+    }
+
+    private static PersistencePlayerData loadFromConfig(Config config, String prefix) {
+        return new PersistencePlayerData(
+                config.getInt(prefix + ".kills"),
+                config.getInt(prefix + ".deaths"),
+                config.getInt(prefix + ".wins"),
+                config.getInt(prefix + ".games"),
+                config.getInt(prefix + ".level"),
+                config.getInt(prefix + ".xp"),
+                config.getInt(prefix + ".coins")
+        );
     }
 }

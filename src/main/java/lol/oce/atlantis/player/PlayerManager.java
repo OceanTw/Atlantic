@@ -16,6 +16,7 @@ public class PlayerManager {
 
     @Getter
     private static final PlayerManager instance = new PlayerManager();
+    @Getter
     List<GamePlayer> players = new ArrayList<>();
     HashMap<GamePlayer, PlayerStatus> playerStatus = new HashMap<>();
     HashMap<GamePlayer, Match> playerMatch = new HashMap<>();
