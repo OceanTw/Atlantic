@@ -1,33 +1,46 @@
 scoreboards:
   lobby:
-    title: 'ATLANTIS'
+    title: '&b&lᴀᴛʟᴀɴᴛɪѕ'
     lines:
-      - '&b&lSTATS'
+      - '&b&lѕᴛᴀᴛѕ'
       - '| &f&lKills: &b{kills}'
       - '| &f&lWins: &b{wins}'
-      - '&b&lPROFILE'
+      - '&b&lᴘʀᴏꜰɪʟᴇ'
       - '| &f&lCoins: &b{coins}'
       - '| &f&lLevel: &b{level}'
       - '| &f&lExperience: &b{xp}'
   in-queue:
-    title:
+    title: '&b&lᴀᴛʟᴀɴᴛɪѕ'
     lines:
-      - '&b&lSTATS'
+      - '&b&lѕᴛᴀᴛѕ'
       - '| &f&lKills: &b{kills}'
       - '| &f&lWins: &b{wins}'
-      - '&b&lPROFILE'
+      - '&b&lᴘʀᴏꜰɪʟᴇ'
       - '| &f&lCoins: &b{coins}'
       - '| &f&lLevel: &b{level}'
       - '| &f&lExperience: &b{xp}'
-      - '&b&lQUEUE'
+      - '&b&lǫᴜᴇᴜᴇ'
       - '| &f&lMode: &b{mode}'
       - '| &f&lPlayers: &b{players}/{maxplayers}'
-  game:
-    title:
+  game-solo:
+    title: '&b&lᴀᴛʟᴀɴᴛɪѕ'
     lines:
-      - '&b&lMATCH'
+      - '&b&lᴍᴀᴛᴄʜ'
       - ' &f&l{stage} in {time}'
       - ' &f&lPlayers remaining: &b{players}'
-      - '&b&lPLAYER'
+      - '&b&lᴘʟᴀʏᴇʀ'
+      - ' &f&lKills: &b{kills}'
+      - ' &f&lDamage Dealt: &b{damage}'
+  game-team:
+    title: '&b&lᴀᴛʟᴀɴᴛɪѕ'
+    lines:
+      - '&b&lᴍᴀᴛᴄʜ'
+      - ' &f&l{stage} in {time}'
+      - ' &f&lTeams remaining: &b{teams}'
+      - '&b&lᴘʟᴀʏᴇʀ'
+      - ' &f&lKills: &b{kills}'
+      - ' &f&lDamage Dealt: &b{damage}'
+      - '&b&lᴛᴇᴀᴍ'
+      - ' &f&lPlayers: &b{players}'
       - ' &f&lKills: &b{kills}'
       - ' &f&lDamage Dealt: &b{damage}'

@@ -1,16 +1,12 @@
-package lol.oce.atlantis.listeners;
+package lol.oce.atlantis.player;
 
 import lol.oce.atlantis.Atlantis;
-import lol.oce.atlantis.player.GamePlayer;
-import lol.oce.atlantis.player.PersistencePlayerData;
-import lol.oce.atlantis.player.PlayerManager;
-import lol.oce.atlantis.scoreboard.BoardManager;
+import lol.oce.atlantis.scoreboards.ScoreboardAdapter;
 import lol.oce.atlantis.types.PlayerStatus;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -29,7 +25,6 @@ public class PlayerListener implements Listener {
         Atlantis atlantis = Atlantis.getInstance();
         Atlantis.Storage storage = atlantis.getStorage();
 
-        BoardManager boardManager = BoardManager.getInstance();
         PlayerManager playerManager = PlayerManager.getInstance();
 
         if (storage == Atlantis.Storage.MONGO) {
@@ -37,7 +32,6 @@ public class PlayerListener implements Listener {
                     GamePlayer.create(playerUniqueId, player) : GamePlayer.createDefault(player);
 
             playerManager.setPlayerStatus(gamePlayer, PlayerStatus.LOBBY);
-            boardManager.update(gamePlayer);
         }
     }
 

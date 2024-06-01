@@ -7,12 +7,14 @@ import lol.oce.atlantis.match.types.MatchStage;
 import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.player.GamePlayer;
+import lol.oce.atlantis.team.Team;
 import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,6 +30,7 @@ public class Match {
 
     private final UUID uuid = UUID.randomUUID();
     private final Set<GamePlayer> players = Sets.newConcurrentHashSet();
+    private final Set<Team> teams = Sets.newConcurrentHashSet();
 
     public void join(GamePlayer player) {
         players.add(player);

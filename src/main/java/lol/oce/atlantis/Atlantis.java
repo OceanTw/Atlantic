@@ -8,8 +8,12 @@ import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import lol.oce.atlantis.commands.MatchJoinCommand;
 import lol.oce.atlantis.commands.MatchStartCommand;
 import lol.oce.atlantis.database.MongoManager;
-import lol.oce.atlantis.listeners.PlayerListener;
-import lol.oce.atlantis.scoreboard.BoardManager;
+import lol.oce.atlantis.player.PlayerListener;
+import lol.oce.atlantis.scoreboards.ScoreboardAdapter;
+import lol.oce.atlantis.utils.scoreboards.Assemble;
+import lol.oce.atlantis.utils.scoreboards.AssembleAdapter;
+import lol.oce.atlantis.utils.scoreboards.AssembleBoard;
+import lol.oce.atlantis.utils.scoreboards.AssembleStyle;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -35,8 +39,8 @@ public class Atlantis extends JavaPlugin {
         registerCommands();
         registerListeners();
         loadConfigs();
+        loadScoreboards();
         configureStorage();
-        BoardManager.getInstance().updateAll();
     }
 
     @Override
@@ -70,6 +74,11 @@ public class Atlantis extends JavaPlugin {
                 .addInputStreamFromResource(fileName)
                 .setDataType(DataType.SORTED)
                 .createConfig().addDefaultsFromInputStream();
+    }
+
+    private void loadScoreboards() {
+        Assemble assemble = new Assemble(this, new ScoreboardAdapter());
+        assemble.setTicks(20);
     }
 
     private void configureStorage() {
