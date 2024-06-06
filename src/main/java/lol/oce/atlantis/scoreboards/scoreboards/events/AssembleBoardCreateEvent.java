@@ -1,4 +1,4 @@
-package lol.oce.atlantis.utils.scoreboards.events;
+package lol.oce.atlantis.scoreboards.scoreboards.events;
 
 import lombok.Getter;
 import lombok.Setter;

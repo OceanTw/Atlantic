@@ -1,4 +1,4 @@
-package lol.oce.atlantis.utils.scoreboards;
+package lol.oce.atlantis.scoreboards.scoreboards;
 
 public class AssembleException extends RuntimeException {
 

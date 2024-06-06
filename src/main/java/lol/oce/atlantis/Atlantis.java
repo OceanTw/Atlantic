@@ -12,12 +12,11 @@ import lol.oce.atlantis.commands.StatusShowCommand;
 import lol.oce.atlantis.database.MongoManager;
 import lol.oce.atlantis.player.PlayerListener;
 import lol.oce.atlantis.scoreboards.ScoreboardAdapter;
-import lol.oce.atlantis.utils.scoreboards.Assemble;
+import lol.oce.atlantis.scoreboards.scoreboards.Assemble;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Score;
 
 import java.io.File;
 

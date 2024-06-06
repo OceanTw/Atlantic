@@ -31,6 +31,10 @@ public class Match {
     private final Set<GamePlayer> players = Sets.newConcurrentHashSet();
     private final Set<Team> teams = Sets.newConcurrentHashSet();
 
+    public void setup() {
+
+    }
+
     public void join(GamePlayer player) {
         players.add(player);
         int playersSize = players.size();
@@ -72,6 +76,8 @@ public class Match {
                 winner == null ? "DRAW" : winner.getPlayer().getName()
         )));
     }
+
+    public void
 
     public int getNextStageTime() {
         Atlantis atlantis = Atlantis.getInstance();

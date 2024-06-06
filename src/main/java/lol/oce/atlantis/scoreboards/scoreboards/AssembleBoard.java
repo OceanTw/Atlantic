@@ -1,6 +1,6 @@
-package lol.oce.atlantis.utils.scoreboards;
+package lol.oce.atlantis.scoreboards.scoreboards;
 
-import lol.oce.atlantis.utils.scoreboards.events.AssembleBoardCreatedEvent;
+import lol.oce.atlantis.scoreboards.scoreboards.events.AssembleBoardCreatedEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

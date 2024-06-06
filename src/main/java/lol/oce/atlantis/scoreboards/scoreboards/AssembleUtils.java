@@ -1,4 +1,4 @@
-package lol.oce.atlantis.utils.scoreboards;
+package lol.oce.atlantis.scoreboards.scoreboards;
 
 import org.bukkit.ChatColor;
 

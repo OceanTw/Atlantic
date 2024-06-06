@@ -1,6 +1,6 @@
-package lol.oce.atlantis.utils.scoreboards.events;
+package lol.oce.atlantis.scoreboards.scoreboards.events;
 
-import lol.oce.atlantis.utils.scoreboards.AssembleBoard;
+import lol.oce.atlantis.scoreboards.scoreboards.AssembleBoard;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Event;

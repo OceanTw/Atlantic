@@ -8,7 +8,7 @@ import lol.oce.atlantis.player.PersistencePlayerData;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
 import lol.oce.atlantis.utils.StringUtils;
-import lol.oce.atlantis.utils.scoreboards.AssembleAdapter;
+import lol.oce.atlantis.scoreboards.scoreboards.AssembleAdapter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
