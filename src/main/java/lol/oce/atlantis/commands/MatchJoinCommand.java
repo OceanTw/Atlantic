@@ -27,7 +27,6 @@ public class MatchJoinCommand {
                     .filter(match -> match.getStatus().equals(MatchStatus.WAITING))
                     .findFirst()
                     .ifPresent(match -> match.join(playerManager.getGamePlayer(player)));
-
             playerManager.setPlayerStatus(playerManager.getGamePlayer(player), PlayerStatus.IN_QUEUE);
         });
     }

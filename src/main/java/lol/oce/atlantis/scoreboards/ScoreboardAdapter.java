@@ -2,11 +2,13 @@ package lol.oce.atlantis.scoreboards;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.match.Match;
+import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.player.GamePlayer;
 import lol.oce.atlantis.player.PersistencePlayerData;
 import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.types.PlayerStatus;
+import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
 import lol.oce.atlantis.scoreboards.scoreboards.AssembleAdapter;
 import org.bukkit.entity.Player;
@@ -70,7 +72,6 @@ public class ScoreboardAdapter implements AssembleAdapter {
         List<String> processedLines = new ArrayList<>();
         Match playerMatch = PlayerManager.getInstance().getPlayerMatch(gamePlayer);
         String[] placeholders = getPlayerPlaceholders(persistencePlayerData, gamePlayer, playerMatch);
-
         for (String line : lines) {
             processedLines.add(StringUtils.handleString(line, placeholders));
         }
@@ -114,9 +115,10 @@ public class ScoreboardAdapter implements AssembleAdapter {
             placeholders.add(Double.toString(gamePlayer.getMatchPlayerData().getDamageDealt()));
             placeholders.add("{mode}");
             placeholders.add(match.getType().name());
-            placeholders.add("{maxplayers}");
-            placeholders.add(Integer.toString(Atlantis.getInstance().getMainConfig().getInt("match.max-players")));
+            placeholders.add("{matchkills}");
+            placeholders.add(Integer.toString(kills));
         }
+
 
         return placeholders.toArray(new String[0]);
     }

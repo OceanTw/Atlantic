@@ -7,6 +7,7 @@ import lol.oce.atlantis.match.types.MatchStage;
 import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.player.GamePlayer;
+import lol.oce.atlantis.player.PlayerManager;
 import lol.oce.atlantis.team.Team;
 import lol.oce.atlantis.utils.QuickUtils;
 import lol.oce.atlantis.utils.StringUtils;
@@ -25,7 +26,8 @@ public class Match {
     private boolean pvp;
     private MatchType type;
     private GamePlayer winner;
-    private MatchStage stage;
+    @Builder.Default
+    private MatchStage stage = MatchStage.PEACE;
 
     private final UUID uuid = UUID.randomUUID();
     private final Set<GamePlayer> players = Sets.newConcurrentHashSet();
@@ -61,7 +63,6 @@ public class Match {
         if (playersSize >= mainConfig.getInt("match.min-players-to-start")) {
             matchManager.countdown(this);
         }
-
         QuickUtils.debug("Player " + player.getPlayer().getName() + " joined the match");
     }
 
