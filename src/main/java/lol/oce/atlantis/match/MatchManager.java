@@ -3,7 +3,11 @@ package lol.oce.atlantis.match;
 import com.google.common.collect.Sets;
 import de.leonhard.storage.Config;
 import lol.oce.atlantis.Atlantis;
+import lol.oce.atlantis.match.types.MatchStage;
 import lol.oce.atlantis.match.types.MatchStatus;
+import lol.oce.atlantis.player.PlayerManager;
+import lol.oce.atlantis.types.PlayerStatus;
+import lol.oce.atlantis.utils.QuickUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,21 +34,35 @@ public class MatchManager {
 
     public void countdown(Match match) {
         executeTimedTask(match, MatchStatus.STARTING, "match.countdown", this::start);
+        QuickUtils.debug("Match " + match.getUuid() + " is starting!");
     }
 
     public void start(Match match) {
-        executeTimedTask(match, MatchStatus.INGAME, "match.duration", this::deathMatch);
+        QuickUtils.debug("Match " + match.getUuid() + " has started!");
+        executeTimedTask(match, MatchStatus.INGAME, "match.duration", m -> {
+            deathMatch(m);
+            m.setStage(MatchStage.DEATHMATCH);
+        });
+        match.setStatus(MatchStatus.INGAME);
+        match.getPlayers().forEach(player -> PlayerManager.getInstance().setPlayerStatus(player, PlayerStatus.PLAYING));
     }
 
     public void deathMatch(Match match) {
-        executeTimedTask(match, MatchStatus.DEATHMATCH, "match.deathmatch-duration", this::end);
+        QuickUtils.debug("Match " + match.getUuid() + " is in deathmatch!");
+        executeTimedTask(match, MatchStatus.DEATHMATCH, "match.deathmatch-duration", m -> {
+            end(m);
+            m.setStage(MatchStage);
+        });
+        match.setStatus(MatchStatus.DEATHMATCH);
     }
 
     public void end(Match match) {
+        QuickUtils.debug("Match " + match.getUuid() + " is ending!");
         executeTimedTask(match, MatchStatus.ENDING, 15, m -> {
             matches.remove(m);
             m.end();
         });
+        match.setStatus(MatchStatus.ENDING);
     }
 
     public Optional<Match> findMatch(UUID uuid) {
@@ -72,6 +90,7 @@ public class MatchManager {
                     cancel();
                 }
                 seconds--;
+                match.setTime(seconds);
             }
         }.runTaskTimerAsynchronously(atlantis, 0, 20L);
     }

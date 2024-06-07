@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,11 +24,12 @@ import java.util.UUID;
 @Builder(setterPrefix = "set")
 public class Match {
     private MatchStatus status;
+    @Builder.Default
+    private MatchStage stage = MatchStage.PEACE;
     private boolean pvp;
     private MatchType type;
     private GamePlayer winner;
-    @Builder.Default
-    private MatchStage stage = MatchStage.PEACE;
+    private int time;
 
     private final UUID uuid = UUID.randomUUID();
     private final Set<GamePlayer> players = Sets.newConcurrentHashSet();
@@ -59,7 +61,11 @@ public class Match {
                 "{2}",
                 Integer.toString(mainConfig.getInt("match.min-players-to-start"))
         ));
-
+        Match match = matchManager.getMatches().stream()
+                .filter(match1 -> match1.getUuid() == uuid)
+                .findFirst()
+                .orElse(null);
+        PlayerManager.getInstance().setPlayerMatch(player, match);
         if (playersSize >= mainConfig.getInt("match.min-players-to-start")) {
             matchManager.countdown(this);
         }
@@ -70,22 +76,12 @@ public class Match {
         Atlantis atlantis = Atlantis.getInstance();
         Config messagesConfig = atlantis.getMessagesConfig();
 
-        players.forEach(player -> player.getPlayer().sendMessage(StringUtils.handleString(
-                messagesConfig.getString("messages.match.end"),
-
-                "{0}",
-                winner == null ? "DRAW" : winner.getPlayer().getName()
-        )));
-    }
-
-    public int getNextStageTime() {
-        Atlantis atlantis = Atlantis.getInstance();
-        Config mainConfig = atlantis.getMainConfig();
-
-        return switch (stage) {
-            case PVP -> mainConfig.getInt("match.peace-duration");
-            case DEATHMATCH -> mainConfig.getInt("match.duration");
-            default -> 0;
-        };
+        // send the stringlist
+        for (GamePlayer gamePlayer : players) {
+            List<String> lines = messagesConfig.getStringList("messages.match.end");
+            for (String line : lines) {
+                gamePlayer.getPlayer().sendMessage(line);
+            }
+        }
     }
 }

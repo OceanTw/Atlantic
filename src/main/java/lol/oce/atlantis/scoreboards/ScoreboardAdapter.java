@@ -2,6 +2,7 @@ package lol.oce.atlantis.scoreboards;
 
 import lol.oce.atlantis.Atlantis;
 import lol.oce.atlantis.match.Match;
+import lol.oce.atlantis.match.types.MatchStage;
 import lol.oce.atlantis.match.types.MatchStatus;
 import lol.oce.atlantis.match.types.MatchType;
 import lol.oce.atlantis.player.GamePlayer;
@@ -101,12 +102,16 @@ public class ScoreboardAdapter implements AssembleAdapter {
         placeholders.add(Integer.toString(level));
         placeholders.add("{xp}");
         placeholders.add(Integer.toString(xp));
+        placeholders.add("{maxplayers}");
+        placeholders.add(Atlantis.getInstance().getMainConfig().getInt("match.max-players") + "");
 
         if (match != null) {
             placeholders.add("{stage}");
-            placeholders.add(match.getStage().name());
-            placeholders.add("{time}");
-            placeholders.add(Integer.toString(match.getNextStageTime()));
+            // get the next stage
+            MatchStage nextStage = match.getStage().next();
+            // Add a logging statement to print the next stage
+            QuickUtils.debug("Next stage: " + (nextStage == null ? "END" : nextStage.name()));
+            placeholders.add(nextStage == null ? "END" : nextStage.name());
             placeholders.add("{players}");
             placeholders.add(Integer.toString(match.getPlayers().size()));
             placeholders.add("{teams}");
@@ -117,6 +122,8 @@ public class ScoreboardAdapter implements AssembleAdapter {
             placeholders.add(match.getType().name());
             placeholders.add("{matchkills}");
             placeholders.add(Integer.toString(kills));
+            placeholders.add("{countdown}");
+            placeholders.add(Integer.toString(match.getTime()));
         }
 
 
