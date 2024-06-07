@@ -77,8 +77,6 @@ public class Match {
         )));
     }
 
-    public void
-
     public int getNextStageTime() {
         Atlantis atlantis = Atlantis.getInstance();
         Config mainConfig = atlantis.getMainConfig();
