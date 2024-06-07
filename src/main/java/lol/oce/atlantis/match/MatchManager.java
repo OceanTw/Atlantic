@@ -39,9 +39,12 @@ public class MatchManager {
 
     public void start(Match match) {
         QuickUtils.debug("Match " + match.getUuid() + " has started!");
+        executeTimedTask(match, MatchStatus.INGAME, "match.peace-duration", m -> {
+            m.setPvp(true);
+            m.updateStage(); // Update the stage after the peace duration
+        });
         executeTimedTask(match, MatchStatus.INGAME, "match.duration", m -> {
             deathMatch(m);
-            m.setStage(MatchStage.DEATHMATCH);
         });
         match.setStatus(MatchStatus.INGAME);
         match.getPlayers().forEach(player -> PlayerManager.getInstance().setPlayerStatus(player, PlayerStatus.PLAYING));
@@ -51,7 +54,7 @@ public class MatchManager {
         QuickUtils.debug("Match " + match.getUuid() + " is in deathmatch!");
         executeTimedTask(match, MatchStatus.DEATHMATCH, "match.deathmatch-duration", m -> {
             end(m);
-            m.setStage(MatchStage);
+            m.updateStage(); // Update the stage to DEATHMATCH
         });
         match.setStatus(MatchStatus.DEATHMATCH);
     }
@@ -61,12 +64,9 @@ public class MatchManager {
         executeTimedTask(match, MatchStatus.ENDING, 15, m -> {
             matches.remove(m);
             m.end();
+            m.updateStage(); // Update the stage to ENDING
         });
         match.setStatus(MatchStatus.ENDING);
-    }
-
-    public Optional<Match> findMatch(UUID uuid) {
-        return matches.stream().filter(match -> match.getUuid().equals(uuid)).findFirst();
     }
 
     private void executeTimedTask(Match match, MatchStatus status, String configPath, TaskCompletionHandler completionHandler) {

@@ -25,7 +25,7 @@ import java.util.UUID;
 public class Match {
     private MatchStatus status;
     @Builder.Default
-    private MatchStage stage = MatchStage.PEACE;
+    private MatchStage stage = MatchStage.PLAYING;
     private boolean pvp;
     private MatchType type;
     private GamePlayer winner;
@@ -78,10 +78,15 @@ public class Match {
 
         // send the stringlist
         for (GamePlayer gamePlayer : players) {
+            PlayerManager.getInstance().setPlayerMatch(gamePlayer, null);
             List<String> lines = messagesConfig.getStringList("messages.match.end");
             for (String line : lines) {
                 gamePlayer.getPlayer().sendMessage(line);
             }
         }
+    }
+
+    public void updateStage() {
+        this.stage = this.stage.next();
     }
 }

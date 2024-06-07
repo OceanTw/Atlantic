@@ -107,11 +107,11 @@ public class ScoreboardAdapter implements AssembleAdapter {
 
         if (match != null) {
             placeholders.add("{stage}");
-            // get the next stage
-            MatchStage nextStage = match.getStage().next();
-            // Add a logging statement to print the next stage
-            QuickUtils.debug("Next stage: " + (nextStage == null ? "END" : nextStage.name()));
-            placeholders.add(nextStage == null ? "END" : nextStage.name());
+            if (match.getStatus() == MatchStatus.ENDING) {
+                placeholders.add(MatchStage.ENDING.name());
+            } else {
+                placeholders.add(!match.isPvp() ? "PvP" : "Deathmatch");
+            }
             placeholders.add("{players}");
             placeholders.add(Integer.toString(match.getPlayers().size()));
             placeholders.add("{teams}");

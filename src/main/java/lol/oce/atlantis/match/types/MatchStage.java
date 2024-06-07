@@ -1,9 +1,9 @@
 package lol.oce.atlantis.match.types;
 
 public enum MatchStage {
-    PEACE(0),
-    PVP(1),
-    DEATHMATCH(2);
+    PLAYING(1),
+    DEATHMATCH(2),
+    ENDING(3);
 
     public final int value;
 
